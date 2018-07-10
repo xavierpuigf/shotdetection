@@ -1,5 +1,5 @@
 # shotdetection
-## Compile using
+Compile using
 ```
 cmake .
 make
