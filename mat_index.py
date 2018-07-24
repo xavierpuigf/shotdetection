@@ -5,21 +5,23 @@ import argparse
 # PyAV - wrapper for FFMPEG
 import av
 # Local imports
-from config import PROC_BASE
 
 
 def process(video_fname, imdb_key):
     """Generate the matidx file.
     """
-
+    if imdb_key is None:
+        movie_name = '.'.join(video_fname.split('/')[-1].split('.')[:-1])
+    else:
+        movie_name = imdb_key
     # create mat-idx template
-    matidx_fname = os.path.join(PROC_BASE, imdb_key, imdb_key + '.matidx')
+    matidx_fname = os.path.join(args.base_dir, movie_name, movie_name + '.matidx')
     if os.path.exists(matidx_fname):
-        print 'matidx for %s already exists' %imdb_key
+        print ('matidx for {} already exists'.format(movie_name))
         return
     else:
         # check directory exists
-        out_dir = os.path.join(PROC_BASE, imdb_key)
+        out_dir = os.path.join(args.base_dir, movie_name)
         if not os.path.isdir(out_dir):
             os.makedirs(out_dir)
         fid = open(matidx_fname, 'w')
@@ -40,17 +42,20 @@ def process(video_fname, imdb_key):
         fid.write('%d %.3f\n' %(fn, ts))
 
     fid.close()
-    print 'Completed writing to', matidx_fname
+    print('Completed writing to', matidx_fname)
 
 
 parser = argparse.ArgumentParser(description='Process video file inputs')
-parser.add_argument('video_fname', type=str, help='Video file path')
-parser.add_argument('imdb_key', type=str, help='IMDb key')
+parser.add_argument('--video_fname', type=str, help='Video file path')
+parser.add_argument('--imdb_key', type=str, help='IMDb key')
+parser.add_argument('--base_dir', type=str, help='Base directory')
 
 if __name__ == '__main__':
     args = parser.parse_args()
-    assert args.imdb_key.startswith('tt'), 'Invalid IMDb key'
-
-    print 'Running for %s\n%s' %(args.imdb_key, args.video_fname)
+    if args.imdb_key is not None:
+        assert args.imdb_key.startswith('tt'), 'Invalid IMDb key'
+        print ('Running for {}\n{}'.format(args.imdb_key, args.video_fname))
+    else:
+        print ('Running for {}'.format(args.video_fname))
     process(args.video_fname, args.imdb_key)
 
