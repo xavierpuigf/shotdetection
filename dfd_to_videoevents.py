@@ -4,10 +4,9 @@
 import os
 import sys
 import numpy as np
+import argparse
 import skimage.morphology as morph
 
-# Local imports
-from config import PROC_BASE
 
 import pdb
 
@@ -16,12 +15,12 @@ params = {'diffthresh': 7,
           'proximity': 8}
 
 
-def fn_ts_mapping(imdb_key):
+def fn_ts_mapping(movie_name):
     """Load matidx to get the mapping between frame-number to timestamp
     """
 
     # check matidx file is there!
-    matidx_fname = os.path.join(PROC_BASE, imdb_key, imdb_key + '.matidx')
+    matidx_fname = os.path.join(args.base_dir, movie_name, movie_name + '.matidx')
     assert os.path.exists(matidx_fname), 'matidx file not found, cannot use timestamps!'
 
     # read and parse matidx file
@@ -69,17 +68,17 @@ def convert_dfds_to_video_events(dfdims, params):
     return changeloc
 
 
-def write_video_events(imdb_key, events_list):
+def write_video_events(movie_name, events_list):
     """Write the list of video-events to file
     """
 
     # get the frame-timestamp mapping
-    fn_ts = fn_ts_mapping(imdb_key)
+    fn_ts = fn_ts_mapping(movie_name)
     
     # prepare videvents filename
-    events_fname = os.path.join(PROC_BASE, imdb_key, imdb_key + '.videvents')
+    events_fname = os.path.join(args.base_dir, movie_name, movie_name + '.videvents')
     if os.path.exists(events_fname):
-        print 'Shot boundary file already exists'
+        print('Shot boundary file already exists')
         sys.exit(0)
 
     else:
@@ -92,29 +91,34 @@ def write_video_events(imdb_key, events_list):
 
     fid.close()
 
+parser = argparse.ArgumentParser(description='Generate videoevents')
+parser.add_argument('--base_dir', type=str, help='Base directory')
+parser.add_argument('--dfd_path', type=str, help='Path to dfd file')
+parser.add_argument('--imdb_key', type=str, help='IMDb key')
+
 
 if __name__ == '__main__':
-    if len(sys.argv) < 2:
-        print 'Usage: python py_dfd_to_videoevents.py <imdb_key>'
-        sys.exit(0)
+    
+    args = parser.parse_args()
+    dfd_fname = args.dfd_path
 
-    imdb_key = sys.argv[1]
-
-    # dfd filename
-    dfd_fname = os.path.join(PROC_BASE, imdb_key, imdb_key + '.dfd')
-    assert os.path.exists(dfd_fname), 'DFD file does not exist for ' + imdb_key
+    assert os.path.exists(dfd_fname), 'DFD file does not exist at ' + dfd_name
 
     with open(dfd_fname, 'r') as fid:
         dfd_info = fid.readlines()
     # dfd files contain: frame-number feature
     dfdims = [float(line.strip().split(' ')[1]) for line in dfd_info if line.strip()]
 
-    print 'Finding locations of shot change...',
+    print('Finding locations of shot change...', end=" ")
     changeloc = convert_dfds_to_video_events(dfdims, params)
-    print 'Success'
+    print('Success')
 
-    print 'Writing to file...',
-    write_video_events(imdb_key, changeloc)
-    print 'Success'
+    if args.imdb_key is not None:
+        movie_name = args.imdb_key
+    else:
+        movie_name = '.'.join(args.dfd_path.split('/')[-1].split('.')[:-1])
+    print('Writing to file...', end=" ")
+    write_video_events(movie_name, changeloc)
+    print('Success')
 
 
