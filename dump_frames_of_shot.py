@@ -43,14 +43,17 @@ def main(video_name, video_fname):
     frames_to_write['end'].append(int(video.get(cv2.CAP_PROP_FRAME_COUNT) - 1))  # add last frame of video
 
     # midframes
-    frames_to_write['mid'] = ((np.array(frames_to_write['begin']) +  np.array(frames_to_write['end']))/2).tolist()
-
+    frames_to_write['mid'] = (np.floor((np.array(frames_to_write['begin']) +  np.array(frames_to_write['end']))/2)).tolist()
+    
     # create folder mappings and the folders
     dir_map = {'begin': 'start_frame', 'mid': 'mid_frame', 'end': 'last_frame'}
     for dirname in dir_map.values():
         os.makedirs(os.path.join(args.base_dir, video_name, dirname))
 
     # start writing frames of each shot
+    print(len(frames_to_write['mid']))
+    print(len(frames_to_write['begin']))
+    print(len(frames_to_write['end']))
     fn = 0
     while True:
         ret, frame = video.read()
