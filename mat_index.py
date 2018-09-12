@@ -52,6 +52,7 @@ parser.add_argument('--base_dir', type=str, help='Base directory')
 
 if __name__ == '__main__':
     args = parser.parse_args()
+    print (args)
     if args.imdb_key is not None:
         assert args.imdb_key.startswith('tt'), 'Invalid IMDb key'
         print ('Running for {}\n{}'.format(args.imdb_key, args.video_fname))
