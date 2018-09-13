@@ -1,4 +1,6 @@
-# Code for shot detection shotdetection
+# Shot detection
+This repo provides code to perform video shot detection and extract middle, beginning and end frames for each shot.
+
 Compile using
 ```
 cmake .
