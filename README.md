@@ -1,6 +1,12 @@
 # Shot detection
 This repo provides code to perform video shot detection and extract middle, beginning and end frames for each shot.
 
+## Dependencies
+You should only need to install PyAV library, which will install other required dependencies. 
+` conda install av -c conda-forge `
+
+The code has been tested om python 3.6
+
 ## How to run
 Compile using
 ```
