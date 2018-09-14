@@ -13,7 +13,7 @@ Extract the movie shots running
 sh run_shot_detection.sh {input_movie_file} {output_folder}
 ```
 
-The code will create a folder `output_foder/input_movie_file` containing the start, middle and last frame for every shot. And a file `output_foder/input_movie_file/input_movie_file.videvens` with the frame and timestamp of every start of shot.
+The code will create a folder `{output_folder}/{input_movie_file}` containing the start, middle and last frame for every shot and a file `{output_folder}/{input_movie_file}/{input_movie_file}.videvents` with the frame and timestamp of every start of shot.
 
 You can test the code using test video
 ```
