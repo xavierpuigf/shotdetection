@@ -15,7 +15,7 @@ sh run_shot_detection.sh {input_movie_file} {output_folder}
 
 The code will create a folder `{output_folder}/{input_movie_file}` containing the start, middle and last frame for every shot and a file `{output_folder}/{input_movie_file}/{input_movie_file}.videvents` with the frame and timestamp of every start of shot.
 
-You can test the code using test video
+You can test the code using a test video as
 ```
 wget http://wednesday.csail.mit.edu/frames/tools/video_tools/test_vid/short.mp4
 mkdir output
