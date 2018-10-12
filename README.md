@@ -33,17 +33,17 @@ Extracts the movie .dfd file, capturing the difference between motion compensate
 ```
 ./ShotDetection input_file.mp4 output_file.dfd
 ```
-Creates mat_index containing frame-number and timestamp mappings
+Creates mat_index containing frame-number and timestamp mappings and saves into some base dir
 ```
-python mat_index.py --video_fname input_file.mp4
+python mat_index.py --video_fname input_file.mp4 --base_dir out_dir
 ```
-Create file with shot changes from .dfd
+Create file with shot changes from .dfd and save into a base dir
 ```
-python dfd_to_videoevents.py --video_fname input_file.mp4 --dfd_path output_file.dfd
+python dfd_to_videoevents.py --base_dir out_dir --dfd_path output_file.dfd
 ```
 Given the shot changes, dump the first middle and last frame for every shot.
 ```
-python dump_frames_of_shot.py --video_fname input_file.mp4 --dfd_path output_file.dfd
+python dump_frames_of_shot.py --video_fname input_file.mp4 --dfd_path output_file.dfd --base_dir "$out_dir"
 ```
 
 
