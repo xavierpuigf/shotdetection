@@ -46,6 +46,8 @@ Given the shot changes, dump the first middle and last frame for every shot.
 python dump_frames_of_shot.py --video_fname input_file.mp4 --dfd_path output_file.dfd --base_dir "$out_dir"
 ```
 
+## Tips and tricks
+If you want to enable parallel processing (of block matching) with OPENMP, please add `-fopenmp` to the `CMAKE_CXX_FLAGS`.
 
 ## Licence and citations
 The code is based on `CVHCI/Okapi` library for processing of images.
